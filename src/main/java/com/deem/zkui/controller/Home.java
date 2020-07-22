@@ -53,6 +53,7 @@ public class Home extends HttpServlet {
             Properties globalProps = (Properties) this.getServletContext().getAttribute("globalProps");
             String zkServer = globalProps.getProperty("zkServer");
             String[] zkServerLst = zkServer.split(",");
+            String zkNodeDefault = globalProps.getProperty("defaultZkNode");
 
             Map<String, Object> templateParam = new HashMap<>();
             String zkPath = request.getParameter("zkPath");
@@ -65,6 +66,11 @@ public class Home extends HttpServlet {
             if (authRole == null) {
                 authRole = ZooKeeperUtil.ROLE_USER;
             }
+
+            if (zkPath == null && zkNodeDefault != null){
+                zkPath = zkNodeDefault;
+            }
+
 
             if (zkPath == null || zkPath.equals("/")) {
                 templateParam.put("zkpath", "/");
